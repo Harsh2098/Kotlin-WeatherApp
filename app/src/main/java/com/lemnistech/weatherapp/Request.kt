@@ -1,13 +1,12 @@
 package com.lemnistech.weatherapp
 
-import android.util.Log
+import com.google.gson.Gson
+import com.lemnistech.weatherapp.data.Result
 import java.net.URL
 
 class Request(private val url: String) {
 
-    fun getForecastJson(): String {
-        val forecastJsonString = URL(url).readText()
-        Log.d(":::", forecastJsonString)
-        return forecastJsonString
-    }
+    private fun getForecastJson() = URL(url).readText()
+
+    fun getForecastResult(): Result = Gson().fromJson(getForecastJson(), Result::class.java)
 }

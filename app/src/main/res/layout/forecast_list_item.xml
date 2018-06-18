@@ -1,16 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:paddingBottom="6dp"
+    android:paddingEnd="6dp"
+    android:paddingStart="6dp">
 
-    <TextView
-        android:id="@+id/forecastWeatherTextView"
+    <ImageView
+        android:id="@+id/weatherImageView"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_centerVertical="true"
+        android:layout_marginStart="4dp"
+        android:contentDescription="@string/weather_image" />
+
+    <LinearLayout
+        android:id="@+id/textLinearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_toEndOf="@+id/weatherImageView"
+        android:layout_toStartOf="@+id/tempLinearLayout"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/forecastMainTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/forecastDescriptionTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#444444"
+            android:textSize="14sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/tempLinearLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_centerHorizontal="true"
-        android:padding="12dp"
-        android:textColor="@android:color/background_dark"
-        android:textSize="16sp" />
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:layout_marginEnd="18dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/minTemperatureTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/maxTemperatureTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:textColor="@android:color/background_dark"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/textLinearLayout"
+        android:layout_marginTop="16dp"
+        android:layout_toEndOf="@+id/weatherImageView"
+        android:background="@android:color/darker_gray" />
 
 </RelativeLayout>

@@ -7,35 +7,56 @@ import android.widget.Toast
 import com.lemnistech.weatherapp.R
 import com.lemnistech.weatherapp.Request
 import com.lemnistech.weatherapp.adapters.ForecastRecyclerAdapter
+import com.lemnistech.weatherapp.data.Forecast
+import com.lemnistech.weatherapp.data.Result
 import kotlinx.android.synthetic.main.activity_main.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 
 class MainActivity : AppCompatActivity(), ForecastRecyclerAdapter.OnForecastClickListener {
 
     private val url = "http://api.openweathermap.org/data/2.5/forecast/daily?" +
             "APPID=15646a06818f61f7b8d7823ca833e1ce&q=94043&mode=json&units=metric&cnt=7"
 
-    private val items = listOf(
-            "Mon 6/23 - Sunny - 31/17", "Tue 6/24 - Foggy - 21/8",
-            "Wed 6/25 - Cloudy - 22/17", "Thurs 6/26 - Rainy - 18/11",
-            "Fri 6/27 - Foggy - 21/10", "Sat 6/28 - TRAPPED IN WEATHERSTATION - 23/18",
-            "Sun 6/29 - Sunny - 20/7"
-    )
+    private var forecastList: List<Forecast>? = null
+    private var adapter: ForecastRecyclerAdapter? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        adapter = ForecastRecyclerAdapter(this, null, this)
+
         forecastRecyclerView.layoutManager = LinearLayoutManager(this)
-        forecastRecyclerView.adapter = ForecastRecyclerAdapter(this, items, this)
+        forecastRecyclerView.adapter = adapter
         forecastRecyclerView.setHasFixedSize(true)
 
         doAsync {
-            Request(url).getForecastJson()
+            val result = Request(url).getForecastResult()
+
+            uiThread {
+                forecastList = updateForecastUi(result)
+                adapter?.swapData(forecastList)
+
+                val text = result.city.name + ", "
+                cityNameTextView.text = text
+
+                countryNameTextView.text = result.city.country
+            }
         }
     }
 
+    private fun updateForecastUi(result: Result): List<Forecast>? {
+        val list = mutableListOf<Forecast>()
+
+        for (forecast in result.list) {
+            list.add(Forecast(forecast.temp, forecast.weather, forecast.dt))
+        }
+
+        return list
+    }
+
     override fun onForecastClick(position: Int) {
-        Toast.makeText(this, items.get(position), Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, forecastList?.get(position)?.weather?.get(0)?.main, Toast.LENGTH_SHORT).show()
     }
 }
